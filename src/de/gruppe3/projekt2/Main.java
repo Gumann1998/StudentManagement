@@ -11,7 +11,7 @@ public class Main {
     /**
      * Stores all students that have been added so far
      */
-    static Set<Student> students = new HashSet<>();
+    private static Set<Student> students = new HashSet<>();
 
     /**
      * Shows menu and receives commands.
@@ -62,12 +62,31 @@ public class Main {
 
     private static void editStudent() {
         System.out.println("Welchen Studenten möchten Sie auswählen und bearbeiten?");
-        String name = sc.nextLine();
+        String name = InputManager.readString(sc, Validator.valName);
+        if(name == null) {
+            System.out.println("Bitte geben Sie einen validen Namen ein!");
+            editStudent();
+            return;
+        }
+
+        Student studentToedit = students.stream().filter(s -> s.getName().equals(name)).findAny().orElse(null);
+        if (studentToedit == null) {
+            System.out.println("Der gesuchte Student wurde nicht gefunden.");
+        }
     }
 
     private static void removeStudent() {
         System.out.println("Welchen Studenten möchten Sie entfernen?");
-        String name = sc.nextLine();
+        String name = InputManager.readString(sc, Validator.valName);
+        if(name == null) {
+            System.out.println("Bitte geben Sie einen validen Namen ein!");
+            editStudent();
+            return;
+        }
+
+        students.stream()
+                .filter(s -> s.getName().equals(name))
+                .forEach(students::remove);
     }
 
     private static void addStudent() {
