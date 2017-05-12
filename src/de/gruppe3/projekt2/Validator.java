@@ -19,7 +19,7 @@ class Validator {
             (object) -> validateID((int) object);
 
     static InputManager.ValidationMethod valGrade =
-            (object) -> validateGrade((double) object);
+            (object) -> validateGrade((float) object);
 
     static InputManager.ValidationMethod valSubject =
             (object) -> validateSubject((String) object);

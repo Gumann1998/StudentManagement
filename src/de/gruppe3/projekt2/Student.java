@@ -1,5 +1,6 @@
 package de.gruppe3.projekt2;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +27,18 @@ class Student {
         avgGrade = total / exams.size();
     }
 
+    void setName(String name) {
+        if (Validator.valName.validate(name)) this.name = name;
+    }
+
+    void setBirthday(String birthday) {
+        if (Validator.valBirthday.validate(birthday)) this.birthday = birthday;
+    }
+
+    void setId(int id) {
+        if (Validator.valID.validate(id)) this.id = id;
+    }
+
     String getName() {
         return name;
     }
@@ -40,6 +53,10 @@ class Student {
 
     Set<Exam> getExams() {
         return exams;
+    }
+
+    float getAvgGrade() {
+        return avgGrade;
     }
 
     /**
@@ -76,5 +93,9 @@ class Student {
     @Override
     public int hashCode() {
         return ((short)birthday.hashCode()) << ((short)name.hashCode());
+    }
+
+    public void addExam(Exam examToAdd) {
+        exams.add(examToAdd);
     }
 }

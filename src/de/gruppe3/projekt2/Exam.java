@@ -11,4 +11,9 @@ class Exam {
         this.grade = grade;
         this.subject = subject;
     }
+
+    @Override
+    public String toString() {
+        return subject + " (Grade: " + grade + ")";
+    }
 }

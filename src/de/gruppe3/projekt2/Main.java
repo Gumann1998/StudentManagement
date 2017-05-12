@@ -69,10 +69,115 @@ public class Main {
             return;
         }
 
-        Student studentToedit = students.stream().filter(s -> s.getName().equals(name)).findAny().orElse(null);
-        if (studentToedit == null) {
+        Student studentToEdit = students.stream().filter(s -> s.getName().equals(name)).findAny().orElse(null);
+        if (studentToEdit == null) {
             System.out.println("Der gesuchte Student wurde nicht gefunden.");
+            return;
         }
+
+        System.out.println("Name: " + studentToEdit.getName());
+        String newName = InputManager.readString(sc, Validator.valName);
+        if(newName != null) studentToEdit.setName(newName);
+
+        System.out.println("ID: " + studentToEdit.getId());
+        int newID = InputManager.readInt(sc, Validator.valID);
+        if(newID != -1) studentToEdit.setId(newID);
+
+        System.out.println("Geburtsdatum: " + studentToEdit.getBirthday());
+        String newBirthday = InputManager.readString(sc, Validator.valBirthday);
+        if(newBirthday != null) studentToEdit.setBirthday(newBirthday);
+
+        System.out.println("Notendurchschnitt: " + studentToEdit.getAvgGrade());
+        studentToEdit.getExams().forEach(System.out::println);
+
+        boolean editGrades = true;
+
+        do {
+            System.out.println("Was möchten Sie tun?\n" +
+                    "1: Note hinzufügen\n" +
+                    "2: Note löschen\n" +
+                    "3: Note bearbeiten\n" +
+                    "4: Weiter im Programm          <-- Geiler Wortwitz right here ;)");
+            int option = sc.nextInt();
+
+            switch (option) {
+                case 1:
+                    addGrade(studentToEdit);
+                    break;
+                case 2:
+                    removeGrade(studentToEdit);
+                    break;
+                case 3:
+                    editGrade(studentToEdit);
+                    break;
+                default:
+                    System.out.println("Dies ist keine gültige Option!");
+                    break;
+                case 4:
+                    editGrades = false;
+            }
+        } while (editGrades);
+    }
+
+    private static void editGrade(Student studentToEdit) {
+        System.out.println("Bitte geben Sie den Vorlesungsnamen ein.");
+        String subject = InputManager.readString(sc, Validator.valSubject);
+        if (subject == null) {
+            System.out.println("Das ist keine gültige Vorlesung!");
+            return;
+        }
+
+        // checks if the grade really exists
+        System.out.println("Geben Sie die neue Note ein.");
+        float grade = InputManager.readFloat(sc, Validator.valGrade);
+        if(grade == -1) {
+            System.out.println("Das ist keine valide Note!");
+            return;
+        }
+
+        Set<Exam> examsToEdit = studentToEdit.getExams();
+
+        examsToEdit.stream()
+                .filter(e -> e.subject.equals(subject))
+                .forEach(examsToEdit::remove);
+
+        studentToEdit.addExam(new Exam(grade, subject));
+    }
+
+    private static void removeGrade(Student studentToEdit) {
+        System.out.println("Bitte geben Sie den Vorlesungsnamen ein.");
+        String subject = InputManager.readString(sc, Validator.valSubject);
+        if (subject == null) {
+            System.out.println("Das ist keine gültige Vorlesung!");
+            return;
+        }
+
+        Set<Exam> examsToEdit = studentToEdit.getExams();
+
+        examsToEdit.stream()
+                .filter(e -> e.subject.equals(subject))
+                .forEach(examsToEdit::remove);
+    }
+
+    private static void addGrade(Student studentToEdit) {
+        // checks if the input is an actual subject
+        System.out.println("Bitte geben Sie den Vorlesungsnamen ein.");
+        String subject = InputManager.readString(sc, Validator.valSubject);
+        if (subject == null) {
+            System.out.println("Das ist keine gültige Vorlesung!");
+            return;
+        }
+
+        // checks if the grade really exists
+        System.out.println("Geben Sie die Note ein.");
+        float grade = InputManager.readFloat(sc, Validator.valGrade);
+        if(grade == -1) {
+            System.out.println("Das ist keine valide Note!");
+            return;
+        }
+
+        Exam examToAdd = new Exam(grade, subject);
+        studentToEdit.addExam(examToAdd);
     }
 
     private static void removeStudent() {
@@ -80,7 +185,7 @@ public class Main {
         String name = InputManager.readString(sc, Validator.valName);
         if(name == null) {
             System.out.println("Bitte geben Sie einen validen Namen ein!");
-            editStudent();
+            removeStudent();
             return;
         }
 
@@ -130,13 +235,15 @@ public class Main {
             } else if(wantsToAdd.equals("n")) break;
 
             // checks if the input is an actual subject
+            System.out.println("Geben Sie den Vorlesungsnamen ein.");
             String subject = InputManager.readString(sc, Validator.valSubject);
             if (subject == null) {
                 System.out.println("Das ist keine gültige Vorlesung!");
                 continue;
             }
             // checks if the grade really exists
-            float grade = InputManager.readInt(sc, Validator.valGrade);
+            System.out.println("Geben Sie die Note ein.");
+            float grade = InputManager.readFloat(sc, Validator.valGrade);
             if(grade == -1) {
                 System.out.println("Das ist keine valide Note!");
                 continue;
