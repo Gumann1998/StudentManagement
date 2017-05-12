@@ -1,7 +1,5 @@
 package de.gruppe3.projekt2;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -11,6 +9,21 @@ import java.util.Date;
  * Created by guhennin on 12.05.17.
  */
 public class Validator {
+    public static InputManager.ValidationMethod valBirthday =
+            (object) -> validateBirthday((String) object);
+
+    public static InputManager.ValidationMethod valName =
+            (object) -> validateName((String) object);
+
+    public static InputManager.ValidationMethod valID =
+            (object) -> validateID((int) object);
+
+    public static InputManager.ValidationMethod valGrade =
+            (object) -> validateGrade((double) object);
+
+    public static InputManager.ValidationMethod valSubject =
+            (object) -> validateSubject((String) object);
+
     static boolean validateBirthday(String birthday) {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -26,6 +39,7 @@ public class Validator {
         } catch (ParseException e) {
             return false;
         }
+
         return true;
     }
 
@@ -36,8 +50,15 @@ public class Validator {
             return false;
     }
 
-    static boolean validateGrades(double grades) {
-        if (grades < 5.0 && grades > 1.0)
+    static boolean validateSubject(String subject) {
+        if (subject.matches("(\\p{Lu}\\p{Ll}+)( ([\\p{L}0-9]+))*")) {
+            return true;
+        } else
+            return false;
+    }
+
+    static boolean validateGrade(double grades) {
+        if (grades <= 5.0 && grades >= 1.0)
             return true;
         return false;
 
@@ -47,12 +68,5 @@ public class Validator {
         if (id <= 0)
             return false;
         return true;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(validateBirthday("30.03.1998"));
-        System.out.println(validateName("Hans Peter"));
-        System.out.println(validateGrades(1.5));
-        System.out.println(validateID(123));
     }
 }

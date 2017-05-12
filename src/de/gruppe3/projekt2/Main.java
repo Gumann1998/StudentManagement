@@ -2,18 +2,23 @@ package de.gruppe3.projekt2;
 
 import java.util.*;
 
-/**
- * Created by jonasliske on 12.05.17.
- */
 public class Main {
+    /**
+     * One central scanner to read all inputs
+     */
     private static final Scanner sc = new Scanner(System.in);
 
+    /**
+     * Stores all students that have been added so far
+     */
     static Set<Student> students = new HashSet<>();
 
-    public static void main(String[] args) {
-
-        System.out.println(" Hauptmenü: Was möchten Sie tun? \n " +
-                "1: Studenten zur Liste hinzufügen \n " +
+    /**
+     * Shows menu and receives commands.
+     */
+    public static void main(String... args) {
+        System.out.println("Hauptmenü: Was möchten Sie tun? \n" +
+                "1: Studenten zur Liste hinzufügen \n" +
                 "2: Studenten aus der Liste entfernen \n" +
                 "3: Studenten auswählen und bearbeiten \n" +
                 "4: Studenten ausgeben \n" +
@@ -43,6 +48,7 @@ public class Main {
                 break;
         }
 
+        main();
     }
 
     private static void exit() {
@@ -66,25 +72,59 @@ public class Main {
 
     private static void addStudent() {
         System.out.println("Geben Sie einen Namen ein");
-        String name = sc.nextLine();
+        String name = InputManager.readString(sc, Validator.valName);
+
+        //Check if name is usable, else start over
+        if(name == null) {
+            System.out.println("Geben Sie einen echten Namen ein!");
+            addStudent();
+            return;
+        }
 
         System.out.println("Geben Sie das Geburtsdatum ein");
-        int date = sc.nextInt();
+        String birthday = InputManager.readString(sc, Validator.valBirthday);
+        if(birthday == null) {
+            System.out.println("Geben Sie ein richtiges Geburtsdatum an!");
+            addStudent();
+            return;
+        }
 
         System.out.println("Geben Sie die ID ein");
-        int id = sc.nextInt();
+        int id = InputManager.readInt(sc, Validator.valID);
+        if (id == -1) {
+            System.out.println("Geben Sie eine zulässige ID ein!");
+            addStudent();
+            return;
+        }
 
         System.out.println("Geben Sie die Noten zu den Prüfungen ein");
 
         List<Exam> exams = new LinkedList<>();
 
-
         while (true) {
+            System.out.println("Wollen Sie noch eine Prüfung eingeben? (j/n)");
+            String wantsToAdd = InputManager.readString(sc, s -> ((String) s).matches("[jn]"));
+            if(wantsToAdd == null) {
+                System.out.println("Bitte geben Sie j oder n ein!");
+                continue;
+            } else if(wantsToAdd.equals("n")) break;
 
-            String subject = sc.nextLine();
-            int grade = sc.nextInt();
+            String subject = InputManager.readString(sc, Validator.valSubject);
+            if (subject == null) {
+                System.out.println("Das ist keine gültige Vorlesung!");
+                continue;
+            }
+
+            float grade = InputManager.readInt(sc, Validator.valGrade);
+            if(grade == -1) {
+                System.out.println("Das ist keine valide Note!");
+                continue;
+            }
+
+            exams.add(new Exam(grade, subject));
         }
 
-
+        Student studentToAdd = new Student(name, birthday, id, exams);
+        students.add(studentToAdd);
     }
 }

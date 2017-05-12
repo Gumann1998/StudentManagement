@@ -10,23 +10,21 @@ import java.util.Set;
 public class Student {
 
     private String name;
-    private int date;
+    private String date;
     private int id;
     private Set<Exam> exams = new HashSet<>();
     private double total = 0.0;
 
-    public Student(String students, int date, int id, List<Exam> examList) {
-        this.name = students;
+    public Student(String name, String date, int id, List<Exam> examList) {
+        this.name = name;
         this.date = date;
         this.id = id;
         exams.addAll(examList);
-
 
         for (Exam exam : exams) {
             total += exam.grade;
         }
         total /= exams.size();
-
     }
 
     @Override
