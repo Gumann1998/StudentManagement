@@ -5,26 +5,26 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
-/**
- * Created by guhennin on 12.05.17.
- */
-public class Validator {
-    public static InputManager.ValidationMethod valBirthday =
+class Validator {
+    /*
+     * Predefined lambdas, ready to be used in the InputManager (or elsewhere)
+     */
+    static InputManager.ValidationMethod valBirthday =
             (object) -> validateBirthday((String) object);
 
-    public static InputManager.ValidationMethod valName =
+    static InputManager.ValidationMethod valName =
             (object) -> validateName((String) object);
 
-    public static InputManager.ValidationMethod valID =
+    static InputManager.ValidationMethod valID =
             (object) -> validateID((int) object);
 
-    public static InputManager.ValidationMethod valGrade =
+    static InputManager.ValidationMethod valGrade =
             (object) -> validateGrade((double) object);
 
-    public static InputManager.ValidationMethod valSubject =
+    static InputManager.ValidationMethod valSubject =
             (object) -> validateSubject((String) object);
 
-    static boolean validateBirthday(String birthday) {
+    private static boolean validateBirthday(String birthday) {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
         try {
@@ -43,30 +43,20 @@ public class Validator {
         return true;
     }
 
-    static boolean validateName(String name) {
-        if (name.matches("(\\p{Lu}\\p{Ll}+)([\\- ](\\p{Lu}\\p{Ll}+))+"))
-            return true;
-        else
-            return false;
+    private static boolean validateName(String name) {
+        return name.matches("(\\p{Lu}\\p{Ll}+)([\\- ](\\p{Lu}\\p{Ll}+))+");
     }
 
-    static boolean validateSubject(String subject) {
-        if (subject.matches("(\\p{Lu}\\p{Ll}+)( ([\\p{L}0-9]+))*")) {
-            return true;
-        } else
-            return false;
+    private static boolean validateSubject(String subject) {
+        return subject.matches("(\\p{Lu}\\p{Ll}+)( ([\\p{L}0-9]+))*");
     }
 
-    static boolean validateGrade(double grades) {
-        if (grades <= 5.0 && grades >= 1.0)
-            return true;
-        return false;
+    private static boolean validateGrade(double grades) {
+        return grades <= 5.0 && grades >= 1.0;
 
     }
 
-    static boolean validateID(int id) {
-        if (id <= 0)
-            return false;
-        return true;
+    private static boolean validateID(int id) {
+        return id > 0;
     }
 }
