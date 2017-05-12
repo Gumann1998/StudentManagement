@@ -1,7 +1,7 @@
 package de.gruppe3.projekt2;
 
 /**
- * Created by jonasliske on 12.05.17.
+ * creates the exam which contains the grade and subject
  */
 public class Exam {
     final float grade;

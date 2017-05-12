@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by jonasliske on 12.05.17.
- */
 public class Student {
 
     private String name;
@@ -21,12 +18,13 @@ public class Student {
         this.id = id;
         exams.addAll(examList);
 
+        // calculates the grade point average
         for (Exam exam : exams) {
             total += exam.grade;
         }
         total /= exams.size();
     }
-
+    // returns the student with all his attributes
     @Override
     public String toString() {
         return name + "(BDay: " + date + ", Mat.-Nr: " + id + ", Avg. Grade: " + total + ")";

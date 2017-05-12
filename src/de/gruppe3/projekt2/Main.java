@@ -101,6 +101,7 @@ public class Main {
 
         List<Exam> exams = new LinkedList<>();
 
+        // checks if user wants to add an exam
         while (true) {
             System.out.println("Wollen Sie noch eine Prüfung eingeben? (j/n)");
             String wantsToAdd = InputManager.readString(sc, s -> ((String) s).matches("[jn]"));
@@ -109,12 +110,13 @@ public class Main {
                 continue;
             } else if(wantsToAdd.equals("n")) break;
 
+            // checks if the input is an actual subject
             String subject = InputManager.readString(sc, Validator.valSubject);
             if (subject == null) {
                 System.out.println("Das ist keine gültige Vorlesung!");
                 continue;
             }
-
+            // checks if the grade really exists
             float grade = InputManager.readInt(sc, Validator.valGrade);
             if(grade == -1) {
                 System.out.println("Das ist keine valide Note!");
@@ -123,7 +125,7 @@ public class Main {
 
             exams.add(new Exam(grade, subject));
         }
-
+        // creates new student with all his attributes
         Student studentToAdd = new Student(name, birthday, id, exams);
         students.add(studentToAdd);
     }
