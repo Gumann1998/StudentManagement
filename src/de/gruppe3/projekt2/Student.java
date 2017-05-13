@@ -1,6 +1,5 @@
 package de.gruppe3.projekt2;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +12,15 @@ class Student {
     private Set<Exam> exams = new HashSet<>();
     private float avgGrade;
 
+    /**
+     * Constructs a new student.
+     *
+     * @param name     The student's validated name (first, second, ..., last divided by spaces)
+     * @param birthday A String representing the student's birth date in the format dd.MM.yyy
+     * @param id       The ID number.
+     * @param examList A list containing the student's finished exams,
+     *                 this list gets COPIED (i.e. can be reused without side effects)
+     */
     Student(String name, String birthday, int id, List<Exam> examList) {
         this.name = name;
         this.birthday = birthday;
@@ -27,28 +35,43 @@ class Student {
         avgGrade = total / exams.size();
     }
 
-    void setName(String name) {
-        if (Validator.valName.validate(name)) this.name = name;
-    }
-
-    void setBirthday(String birthday) {
-        if (Validator.valBirthday.validate(birthday)) this.birthday = birthday;
-    }
-
-    void setId(int id) {
-        if (Validator.valID.validate(id)) this.id = id;
-    }
-
     String getName() {
         return name;
+    }
+
+    /**
+     * Changes the name if the new one is valid
+     *
+     * @param name A valid name
+     */
+    void setName(String name) {
+        if (Validator.valName.validate(name)) this.name = name;
     }
 
     String getBirthday() {
         return birthday;
     }
 
+    /**
+     * Changes the birthday if the new one is valid
+     *
+     * @param birthday A valid date
+     */
+    void setBirthday(String birthday) {
+        if (Validator.valBirthday.validate(birthday)) this.birthday = birthday;
+    }
+
     int getId() {
         return id;
+    }
+
+    /**
+     * Changes the ID if the new one is valid
+     *
+     * @param id A valid ID
+     */
+    void setId(int id) {
+        if (Validator.valID.validate(id)) this.id = id;
     }
 
     Set<Exam> getExams() {
@@ -60,7 +83,7 @@ class Student {
     }
 
     /**
-     * Nicely formats the sutdent's attributes into a string
+     * Nicely formats the sutdent's attributes into a string.
      *
      * @return The string...
      */
@@ -70,8 +93,7 @@ class Student {
     }
 
     /**
-     * Compares birthday and name to check for equality.
-     * No two students are allowed to have the same birthday AND name.
+     * Compares ids to check for equality.
      *
      * @param o The object to check for equality
      * @return true if equal, false if different
@@ -79,23 +101,21 @@ class Student {
     @Override
     public boolean equals(Object o) {
         return o instanceof Student
-                && ((Student) o).getName().equals(name)
-                && ((Student) o).birthday.equals(birthday);
+                && ((Student) o).getId() == id;
     }
 
     /**
-     * Mashes together birthday and name to produce a hash.
-     * No two students are allowed to have the same birthday AND name.
+     * Hash = id.
      *
      * @return The resulting hash code, die 2 most significant bytes sind ein Teil des birthday-Hashes,
      * die LSBs ein Teil des name-Hashes
      */
     @Override
     public int hashCode() {
-        return ((short)birthday.hashCode()) << ((short)name.hashCode());
+        return id;
     }
 
-    public void addExam(Exam examToAdd) {
+    void addExam(Exam examToAdd) {
         exams.add(examToAdd);
     }
 }
