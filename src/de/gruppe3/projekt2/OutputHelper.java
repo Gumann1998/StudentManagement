@@ -28,13 +28,13 @@ class OutputHelper {
     }
 
     static void makeExamTable(Set<Exam> exams) {
-        print("-------------------------------+------");
-        print("            Subject            | Grade");
-        print("-------------------------------+------");
+        print("-------------------------------+-------+-------");
+        print("            Subject            | Grade | Passed");
+        print("-------------------------------+-------+-------");
 
-        exams.forEach(e -> printf(" %29.29s | %1.2f", e.subject, e.grade));
+        exams.forEach(e -> printf(" %29.29s | %1.2f  | %s", e.subject, e.grade, e.grade <= 4 ? "Passed" : "Failed"));
 
-        print("-------------------------------+------\n");
+        print("-------------------------------+-------+-------\n");
     }
 
     static void print(String s) {
