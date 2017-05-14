@@ -32,7 +32,7 @@ class OutputHelper {
         print("            Subject            | Grade | Passed");
         print("-------------------------------+-------+-------");
 
-        exams.forEach(e -> printf(" %29.29s | %1.2f  | %s", e.subject, e.grade, e.grade <= 4 ? "Passed" : "Failed"));
+        exams.forEach(e -> printf(" %29.29s | %1.2f  | %s\u001B[0m", e.subject, e.grade, e.grade <= 4 ? "\u001B[32mPassed" : "\u001B[31mFailed"));
 
         print("-------------------------------+-------+-------\n");
     }

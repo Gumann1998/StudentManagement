@@ -90,8 +90,8 @@ class Validator {
      * @return true if grade is valid, false otherwise
      */
     @SuppressWarnings("WeakerAccess")
-    static boolean validateGrade(double grades) {
-        return grades <= 5.0 && grades >= 1.0;
+    static boolean validateGrade(float grades) {
+        return grades <= 5 && grades >= 1;
     }
 
     /**

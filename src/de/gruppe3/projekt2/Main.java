@@ -1,5 +1,6 @@
 package de.gruppe3.projekt2;
 
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,15 +16,108 @@ public class Main {
     private static Set<Student> students = new HashSet<>();
 
     /**
-     * Shows menu and receives commands.
+     * Loads save file and then starts program loop.
+     *
+     * @param args not used
      */
     public static void main(String... args) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("saveFile.txt"));
+
+            Map<Integer, Student> idToStudentMap = new HashMap<>();
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                String[] lineValues = currentLine.split(" ");
+
+                switch (lineValues[0]) {
+                    case "s":
+                        //Validate id
+                        int id = Integer.parseInt(lineValues[1]); //If this is not a number, exception is caught below
+                        if (!Validator.validateID(id)) {
+                            System.err.println("Die ID eines Studenten ist nicht korrekt.");
+                        }
+
+                        //Name can have arbitrarily many secondary names, need to calculate last name index
+                        int nameEndIndex = lineValues.length - 2; //Last index (length - 1) is the birthday
+                        String name = lineValues[2]; //Add first name to whole name
+
+                        //Append the rest of the names
+                        for (int i = 3; i <= nameEndIndex; i++) {
+                            name += " " + lineValues[i];
+                        }
+
+                        //Validate name and birthday
+                        if (!Validator.validateName(name)) {
+                            System.err.println("Der Name eines Studenten ist nicht valide!");
+                            break;
+                        }
+
+                        String birthday = lineValues[lineValues.length - 1];
+                        if (!Validator.validateBirthday(birthday)) {
+                            System.err.println("Der Geburtstag eines Studenten ist nicht valide.");
+                            break;
+                        }
+
+                        Student newStudent = new Student(name, birthday, id, Collections.emptyList());
+                        idToStudentMap.put(id, newStudent);
+                        break;
+                    case "e":
+                        int studentId = Integer.parseInt(lineValues[1]);
+                        Student examHolder = idToStudentMap.get(studentId);
+
+                        if (examHolder == null) {
+                            System.err.println("Zu einer Prüfung wurde kein Student gefunden!");
+                            break;
+                        }
+
+                        int subjectEndIndex = lineValues.length - 2; //Last index is grade
+                        String subject = lineValues[2]; //First word of subject
+
+                        //Add all remaining words to the name
+                        for (int i = 3; i <= subjectEndIndex; i++) {
+                            subject += " " + lineValues[i];
+                        }
+
+                        if (!Validator.validateSubject(subject)) {
+                            System.err.println("Der Vorlesungsname einer Prüfung ist nicht korrekt!");
+                            break;
+                        }
+
+                        float grade = Float.parseFloat(lineValues[lineValues.length - 1]);
+                        if (!Validator.validateGrade(grade)) {
+                            System.err.println("Die Note einer Prüfung ist nicht korrekt.");
+                            break;
+                        }
+
+                        Exam newExam = new Exam(grade, subject);
+                        examHolder.addExam(newExam);
+                }
+            }
+
+            System.out.println("Aus der Speicherdatei wurden " + idToStudentMap.size() + " Studenten eingelesen.\n");
+            students.addAll(idToStudentMap.values()); //Add all students from the file to the main set
+        } catch (IOException e) {
+            System.out.println("Es wurde keine Speicherdatei gefunden. Wir fangen von ganz vorne an.\n");
+        } catch (NumberFormatException e) {
+            System.err.println("Die Speicherdatei enthält inkorrekte Daten!\n");
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Die Speicherdatei enthält nicht die richtige Zahl an Argumenten!\n");
+        }
+
+        loop();
+    }
+
+    /**
+     * Shows menu and receives commands until user exits program.
+     */
+    private static void loop() {
         OutputHelper.print("Hauptmenü: Was möchten Sie tun? \n" +
                 "1: Studenten zur Liste hinzufügen \n" +
                 "2: Studenten aus der Liste entfernen \n" +
                 "3: Studenten auswählen und bearbeiten \n" +
                 "4: Studenten ausgeben \n" +
-                "5: Abbruch ");
+                "5: Speichern & Beenden");
 
         int selection = sc.nextInt();
         switch (selection) {
@@ -56,11 +150,45 @@ public class Main {
                 break;
         }
 
-        main();
+        loop();
     }
 
     private static void exit() {
         OutputHelper.print("Programm wurde erfolgreich beendet");
+
+        //No need to save when nothing is there
+        if (students.size() != 0) {
+            //Save students in text file
+            File saveFile = new File("saveFile.txt");
+
+            if (!saveFile.exists()) {
+                try {
+                    saveFile.createNewFile();
+                } catch (IOException e) {
+                    System.err.println("Could not save students to file - no permission!");
+                    System.exit(1);
+                }
+            }
+
+            try {
+                PrintWriter writer = new PrintWriter(saveFile);
+
+                //First, write student, then his/her exams
+                for (Student student : students) {
+                    writer.write("s " + student.getId() + " " + student.getName() + " " + student.getBirthday() + "\n");
+
+                    for (Exam exam : student.getExams()) {
+                        writer.write("e " + student.getId() + " " + exam.subject + " " + exam.grade + "\n");
+                    }
+                }
+
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         System.exit(0);
     }
 
@@ -134,7 +262,7 @@ public class Main {
             OutputHelper.print("1: Note hinzufügen");
             OutputHelper.print("2: Note löschen");
             OutputHelper.print("3: Note bearbeiten");
-            OutputHelper.print("4: Weiter im Programm          <-- Geiler Wortwitz right here ;)");
+            OutputHelper.print("4: Weiter im Programm\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\u001B[35m<-- Geiler Wortwitz right here ;)\u001B[0m");
             int option = sc.nextInt();
 
             switch (option) {
@@ -201,9 +329,11 @@ public class Main {
 
         Set<Exam> examsToEdit = studentToEdit.getExams();
 
-        examsToEdit.stream()
+        Set<Exam> toRemove = examsToEdit.stream()
                 .filter(e -> e.subject.equals(subject))
-                .forEach(examsToEdit::remove);
+                .collect(Collectors.toSet());
+
+        examsToEdit.removeAll(toRemove);
     }
 
     private static void addGrade(Student studentToEdit) {

@@ -27,6 +27,10 @@ class Student {
         this.id = id;
         exams.addAll(examList);
 
+        calculateAvgGrade();
+    }
+
+    private void calculateAvgGrade() {
         // calculates the grade point average
         float total = 0;
         for (Exam exam : exams) {
@@ -117,5 +121,6 @@ class Student {
 
     void addExam(Exam examToAdd) {
         exams.add(examToAdd);
+        calculateAvgGrade();
     }
 }
