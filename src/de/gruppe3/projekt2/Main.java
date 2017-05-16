@@ -36,6 +36,7 @@ public class Main {
                         int id = Integer.parseInt(lineValues[1]); //If this is not a number, exception is caught below
                         if (!Validator.validateID(id)) {
                             System.err.println("Die ID eines Studenten ist nicht korrekt.");
+                            break;
                         }
 
                         //Name can have arbitrarily many secondary names, need to calculate last name index
@@ -94,6 +95,8 @@ public class Main {
                         examHolder.addExam(newExam);
                 }
             }
+
+            reader.close();
 
             System.out.println("Aus der Speicherdatei wurden " + idToStudentMap.size() + " Studenten eingelesen.\n");
             students.addAll(idToStudentMap.values()); //Add all students from the file to the main set
