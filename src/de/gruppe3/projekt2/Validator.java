@@ -6,6 +6,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 
+/**
+ * Contains patterns and methods used to verify user input
+ */
 class Validator {
     /*
      * Predefined lambdas, ready to be used in the InputHelper (or elsewhere)

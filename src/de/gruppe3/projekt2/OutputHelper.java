@@ -3,6 +3,9 @@ package de.gruppe3.projekt2;
 import java.util.Comparator;
 import java.util.Set;
 
+/**
+ * Formats console outputs in a neat way.
+ */
 class OutputHelper {
     enum SortingCriterium {
         SORT_BY_NAME(Comparator.comparing(Student::getName)),
@@ -16,6 +19,10 @@ class OutputHelper {
         }
     }
 
+    /**
+     * Used to distinguish between menu levels (main menu, sub menu, sub sub menu, ...)
+     * Gets increased by \t with each menu level
+     */
     private static String indent = "";
 
     static void enterSubMenu() {

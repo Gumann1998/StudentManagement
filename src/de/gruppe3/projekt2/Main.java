@@ -27,11 +27,19 @@ public class Main {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("saveFile.txt"));
 
+            //Why map? Exams store id of their holder, with this map the holder is easily queried
             Map<Integer, Student> idToStudentMap = new HashMap<>();
 
+            //Read next line into currentLine until end of file
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
+                //Split line into variables described in format spec
                 String[] lineValues = currentLine.split(" ");
+
+                /* Format of save file:
+                 * One data object per line
+                 * Student: s [id] [firstName] [secondName] [...] [lastName] [birthday]
+                 * Exam: e [holderId] [subjectFirstWord] [...] [subjectLastWord] [grade] */
 
                 switch (lineValues[0]) {
                     case "s":
@@ -63,10 +71,12 @@ public class Main {
                             break;
                         }
 
+                        //Add new student to map
                         Student newStudent = new Student(name, birthday, id, Collections.emptyList());
                         idToStudentMap.put(id, newStudent);
                         break;
                     case "e":
+                        //Get associated student for this exam
                         int studentId = Integer.parseInt(lineValues[1]);
                         Student examHolder = idToStudentMap.get(studentId);
 
@@ -78,22 +88,25 @@ public class Main {
                         int subjectEndIndex = lineValues.length - 2; //Last index is grade
                         String subject = lineValues[2]; //First word of subject
 
-                        //Add all remaining words to the name
+                        //Add all remaining words to the subject name
                         for (int i = 3; i <= subjectEndIndex; i++) {
                             subject += " " + lineValues[i];
                         }
 
+                        //Validate subject
                         if (!Validator.validateSubject(subject)) {
                             System.err.println("Der Vorlesungsname einer Prüfung ist nicht korrekt!");
                             break;
                         }
 
+                        //Validate grade
                         float grade = Float.parseFloat(lineValues[lineValues.length - 1]);
                         if (!Validator.validateGrade(grade)) {
                             System.err.println("Die Note einer Prüfung ist nicht korrekt.");
                             break;
                         }
 
+                        //Add new exam to its holder
                         Exam newExam = new Exam(grade, subject);
                         examHolder.addExam(newExam);
                 }
@@ -103,11 +116,11 @@ public class Main {
 
             System.out.println("Aus der Speicherdatei wurden " + idToStudentMap.size() + " Studenten eingelesen.\n");
             students.addAll(idToStudentMap.values()); //Add all students from the file to the main set
-        } catch (IOException e) {
+        } catch (IOException e) { //When file not found or permission denied
             System.out.println("Es wurde keine Speicherdatei gefunden. Wir fangen von ganz vorne an.\n");
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e) { //When wrong id or grade is supplied
             System.err.println("Die Speicherdatei enthält inkorrekte Daten!\n");
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) { //When wrong number of args is used
             System.err.println("Die Speicherdatei enthält nicht die richtige Zahl an Argumenten!\n");
         }
 
@@ -116,6 +129,7 @@ public class Main {
 
     /**
      * Shows menu and receives commands until user exits program.
+     * Repeats until exit command.
      */
     private static void loop() {
         OutputHelper.print("Hauptmenü: Was möchten Sie tun? \n" +
@@ -159,6 +173,9 @@ public class Main {
         loop();
     }
 
+    /**
+     * Saves the list of students and ends the program
+     */
     private static void exit() {
         OutputHelper.print("Programm wurde erfolgreich beendet");
 
@@ -167,6 +184,7 @@ public class Main {
             //Save students in text file
             File saveFile = new File("saveFile.txt");
 
+            //Sicherstellen, dass SaveFile existiert
             if (!saveFile.exists()) {
                 try {
                     saveFile.createNewFile();
@@ -176,6 +194,7 @@ public class Main {
                 }
             }
 
+            //Daten in Savefile schreiben
             try {
                 PrintWriter writer = new PrintWriter(saveFile);
 
@@ -198,6 +217,9 @@ public class Main {
         System.exit(0);
     }
 
+    /**
+     * Lists all students and lets users choose the ordering criteria
+     */
     private static void listStudents() {
         OutputHelper.makeStudentTable(students);
 
@@ -233,40 +255,41 @@ public class Main {
         Set<Student> selected;
 
         String input = sc.next();
-        if (Validator.validateName(input)) {
+        if (Validator.validateName(input)) { //Check if student with input name exists
             selected = students.stream().filter(s -> s.getName().equals(input)).collect(Collectors.toSet());
 
-            if (selected.size() > 1) {
+            if (selected.size() > 1) { //More than one student with same name
                 OutputHelper.printError("Es gibt mehrere Studenten mit diesem Namen, " +
                         "bitte geben Sie die ID  Betroffenen ein.");
                 editStudent();
                 return;
-            } else if (selected.size() == 0) {
+            } else if (selected.size() == 0) { //Nobody found
                 OutputHelper.printError("Es wurde kein Student mit dem Namen '" + input + "' gefunden.");
                 editStudent();
                 return;
             } // Else: Jump over rest of if-statements and start editing
-        } else if (input.matches("[0-9]+")
+        } else if (input.matches("[0-9]+") //Check if student was referenced by ID
                 && Validator.validateID(Integer.parseInt(input))) {
             int id = Integer.parseInt(input);
 
             selected = students.stream().filter(s -> s.getId() == id).collect(Collectors.toSet());
 
-            if (selected.size() == 0) {
+            if (selected.size() == 0) { //Nobody found
                 OutputHelper.printError("Es wurde kein Student mit ID '" + id + "' gefunden.");
                 editStudent();
                 return;
-            } else if (selected.size() > 1) {
+            } else if (selected.size() > 1) { //Cannot possibly be because of hashset and id as hash!!
                 OutputHelper.printError("Es wurden mehrere Studenten mit derselben ID gefunden. " +
                         "Bitte entfernen Sie alle außer einen.");
                 return;
             } //Else: jump to editing
-        } else {
+        } else { //Wrong ID
             OutputHelper.printError("Bitte geben Sie eine valide ID oder einen validen Namen ein!");
             editStudent();
             return;
         }
 
+        //Selected stream HAS to have students because of validation above - if not: Illegal State
         Student studentToEdit = selected.stream().findAny().orElseThrow(IllegalStateException::new);
 
         OutputHelper.print("Name: " + studentToEdit.getName());
@@ -338,6 +361,8 @@ public class Main {
             return;
         }
 
+        //Remove replaced exams and add new one because exam fields are final
+
         Set<Exam> examsToEdit = studentToEdit.getExams();
 
         examsToEdit = examsToEdit.stream()
@@ -391,6 +416,10 @@ public class Main {
         OutputHelper.print("Sie können aus den folgenden Studenten auswählen:");
         OutputHelper.makeStudentTable(students);
         OutputHelper.print("Studenten können mit Name oder ID ausgewählt werden.");
+
+        //
+        //  See editStudent for explanation
+        //
 
         String input = sc.next();
         if (Validator.validateName(input)) {
