@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static de.gruppe3.projekt2.OutputHelper.SortingCriterium.SORT_BY_GRADE;
+import static de.gruppe3.projekt2.OutputHelper.SortingCriterium.SORT_BY_NAME;
+
 public class Main {
     /**
      * One central scanner to read all inputs
@@ -197,6 +200,29 @@ public class Main {
 
     private static void listStudents() {
         OutputHelper.makeStudentTable(students);
+
+        OutputHelper.print("Was möchten Sie tun?");
+        OutputHelper.print("1: Nach Name sortieren");
+        OutputHelper.print("2: Nach Note sortieren");
+        OutputHelper.print("3: Menü verlassen");
+
+        //Validate input, if incorrect start over
+        int choice = InputHelper.readInt(sc, i -> (int)i >= 1 && (int)i <= 3);
+        if (choice == -1) {
+            OutputHelper.printError("Dies ist keine mögliche Option!");
+            listStudents();
+            return;
+        }
+
+        //1: Nach Name sortieren, 2: Nach Note sortieren, 3: Menü verlassen (überspringt switch, springt zu Ende)
+        switch (choice) {
+            case 1:
+                OutputHelper.makeStudentTable(students, SORT_BY_NAME);
+                break;
+            case 2:
+                OutputHelper.makeStudentTable(students, SORT_BY_GRADE);
+                break;
+        }
     }
 
     private static void editStudent() {
@@ -255,12 +281,13 @@ public class Main {
         String newBirthday = InputHelper.readString(sc, Validator.valBirthday);
         if (newBirthday != null) studentToEdit.setBirthday(newBirthday);
 
-        OutputHelper.print("Notendurchschnitt: " + studentToEdit.getAvgGrade());
-        OutputHelper.makeExamTable(studentToEdit.getExams());
+        OutputHelper.printf("Notendurchschnitt: %1.2f", studentToEdit.getAvgGrade());
 
         boolean editGrades = true;
 
         do {
+            OutputHelper.makeExamTable(studentToEdit.getExams());
+
             OutputHelper.print("Was möchten Sie tun?");
             OutputHelper.print("1: Note hinzufügen");
             OutputHelper.print("2: Note löschen");

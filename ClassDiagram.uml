@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>de.gruppe3.projekt2</OriginalElement>
+  <nodes>
+    <node x="67.91666666666663" y="213.0">de.gruppe3.projekt2.Student</node>
+    <node x="0.0" y="712.0">de.gruppe3.projekt2.Main</node>
+    <node x="70.66666666666669" y="0.0">de.gruppe3.projekt2.Exam</node>
+    <node x="951.9166666666665" y="0.0">de.gruppe3.projekt2.InputHelper</node>
+    <node x="922.9166666666665" y="246.0">de.gruppe3.projekt2.Validator</node>
+    <node x="580.9166666666666" y="323.5">de.gruppe3.projekt2.OutputHelper</node>
+    <node x="575.6666666666666" y="789.0">de.gruppe3.projekt2.OutputHelper.SortingCriterium</node>
+    <node x="1026.4166666666665" y="145.0">de.gruppe3.projekt2.InputHelper.ValidationMethod</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="de.gruppe3.projekt2.Student" target="de.gruppe3.projekt2.Exam">
+      <point x="0.0" y="-224.5" />
+      <point x="314.41666666666663" y="188.0" />
+      <point x="240.16666666666669" y="188.0" />
+      <point x="56.5" y="81.5" />
+    </edge>
+    <edge source="de.gruppe3.projekt2.InputHelper.ValidationMethod" target="de.gruppe3.projekt2.InputHelper">
+      <point x="0.0" y="-25.5" />
+      <point x="0.0" y="47.5" />
+    </edge>
+    <edge source="de.gruppe3.projekt2.Validator" target="de.gruppe3.projekt2.InputHelper.ValidationMethod">
+      <point x="0.0" y="-125.0" />
+      <point x="0.0" y="25.5" />
+    </edge>
+    <edge source="de.gruppe3.projekt2.OutputHelper.SortingCriterium" target="de.gruppe3.projekt2.OutputHelper">
+      <point x="51.25" y="-70.0" />
+      <point x="0.0" y="114.0" />
+    </edge>
+    <edge source="de.gruppe3.projekt2.Main" target="de.gruppe3.projekt2.Exam">
+      <point x="-115.0" y="-147.0" />
+      <point x="57.41666666666663" y="188.0" />
+      <point x="127.16666666666669" y="188.0" />
+      <point x="-56.5" y="81.5" />
+    </edge>
+    <edge source="de.gruppe3.projekt2.Main" target="de.gruppe3.projekt2.Student">
+      <point x="0.0" y="-147.0" />
+      <point x="172.5" y="687.0" />
+      <point x="150.08333333333326" y="687.0" />
+      <point x="-164.33333333333337" y="224.5" />
+    </edge>
+    <edge source="de.gruppe3.projekt2.OutputHelper.SortingCriterium" target="de.gruppe3.projekt2.Student">
+      <point x="-51.25" y="-70.0" />
+      <point x="626.9166666666666" y="687.0" />
+      <point x="478.75" y="687.0" />
+      <point x="164.33333333333337" y="224.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8489278752436646" x="664.5" y="503.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
