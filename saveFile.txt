@@ -1,0 +1,43 @@
+s 28902 Betty Marinus Xav 02.03.1981
+s 29930 Zenz Damal Doro 07.05.1981
+s 30958 Annemarie Katrin 12.07.1981
+s 297210 Marlene Sabine 23.05.1995 
+s 298238 Veitl Blase 21.06.1995 
+s 299266 Wally Leopold 20.07.1995 
+s 300294 Hans Fredl 18.08.1995 
+s 301322 Usche Annerl 16.09.1995 
+s 302350 Poidl Augusta 15.10.1995 
+s 303378 Korwe Hansei 13.11.1995 
+e 28902 Advanced Physics 4
+e 28902 Ägyptologie 4.07
+e 28902 Alte Geschichte 4.14
+e 29930 American Studies 4.21
+e 29930 Angewandte Informatik 1.28
+e 29930 Assyriologie 4.35
+e 29930 Astronomie 4.42
+e 29930 Berufswissenschaft 3.49
+e 29930 Bildungswissenschaft 4.56
+e 30958 Bildungswissen 4.63
+e 30958 Biochemie 4.7
+e 30958 Biologie und Biowissenschaften 1.77
+e 297210 Biomedical Engineering 4.84
+e 297210 Byzantinische Archäologie 4.91
+e 299266 Chemie 1.98
+e 298238 Christentum und Kultur 4.05
+e 298238 Clinical Medical Physics 2.12
+e 298238 Computerlinguistik 4.19
+e 300294 Deutsch 2.26
+e 300294 Deutsch als Zweitsprache 4.33
+e 300294 Deutsch französischer Master 4.4
+e 301322 Deutsche Philologie 2.47
+e 301322 Diakonie Führungsverantwortung 2.54
+e 301322 Diakoniewissenschaft Führung 2.61
+e 302350 Economics 2.68
+e 302350 Economics 2.75
+e 302350 Editionswissenschaft 2.82
+e 303378 Englisch 2.89
+e 303378 Englische Philologie 2.96
+e 303378 English Studies Anglistik 3.03
+e 28902 Erziehungswissenschaft 4.1
+e 28902 Ethnologie 4.17
+e 28902 Europäische Kunstgeschichte 5
